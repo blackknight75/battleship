@@ -29,14 +29,17 @@ class Computer
     position << row
   end
 
-  def validate_ship_position(split_position, ship_length, ship)
+  def validate_ship_position(ship)
+    split_position = input_position_generator(generate_ship_position)
+    # possible_position = generate_ship_position
     key_to_validate = Array.new
     (ship[1].length).times do |index|
       #check orientation
       key_to_validate << @computer_board.rows[split_position[0]][(split_position[1] + index)]
     end
-    validate_key(key_to_validate, (ship[1].length))
+    validate_key(key_to_validate, ship)
     place_ship_on_board(split_position, ship)
+    place_position_on_ship(split_position, ship)
   end
 
   def place_ship_on_board(split_position, ship)
@@ -46,7 +49,6 @@ class Computer
   end
 
   def convert_position_to_strings(split_position)
-    binding.pry
     row = "A" if split_position[0] == 0
     row = "B" if split_position[0] == 1
     row = "C" if split_position[0] == 2
@@ -55,50 +57,55 @@ class Computer
     converted_string_position
   end
 
-  def validate_key(key_to_validate, ship_length)
-    passkey = generate_passkey(ship_length)
+  def validate_key(key_to_validate, ship)
+    passkey = generate_passkey(ship)
     if key_to_validate == passkey
       #place ship on computer ship board
     else
-      place_ships
+      validate_ship_position(ship)
     end
   end
 
-  def generate_passkey(ship_length)
+  def generate_passkey(ship)
     key = Array.new
-    ship_length.times do
+    (ship[1].length).times do
       key.push("")
     end
     key
   end
 
-  def place_position_on_ship(possible_position, ship)
-    binding.pry
+  def place_position_on_ship(split_position, ship)
     incremented_string = String.new
-
+    string_position = convert_position_to_strings(split_position)
     (ship[1].length).times do |index|
       if index == 0
-        ship[1][index] = possible_position
-      else index != 0
-        incremented_string = possible_position.next
-        ship[1][index] = incremented_string
+        ship[1][index] = string_position
+      else
+        string_position.next!
+        ship[1][index] = string_position
       end
     end
   end
 
   def place_ships
-    possible_position = generate_ship_position
+    # possible_position = generate_ship_position
     @computer_board.ships.ships.each do |ship|
       ship_length = ship[1].length
-      split_position = input_position_generator(possible_position)
-      validate_ship_position(split_position, ship_length, ship)
-      place_position_on_ship(possible_position, ship)
+      # split_position = input_position_generator(possible_position)
+      validate_ship_position(ship)
+      binding.pry
     end
   end
 
   def orientation_generator
     ["horizontal", "vertical"].sample
   end
+
+  def generate_board
+    puts @computer_board.columns
+    puts @computer_board.rows.join
+  end
+end
   #NOT BEING USED
   # def make_possible_ship_location(ship, ship_length, possible_position)
   #   possible_ship_position = Array.new
@@ -129,36 +136,31 @@ class Computer
   #     starting_position = generate_ship_position
   #   end
 
-  def horizontal_position_incrementor(index, string_position)
-    binding.pry
-    if index == 1
-      index.times do |i|
-      string_position[1].next!
-      end
-    elsif index == 2
-      (index - 1).times do |i|
-        string_position[1].next!
-      end
-    elsif index == 3
-      (index - 2).times do |i|
-        string_position[1].next!
-      end
-    elsif index == 4
-      (index - 3).times do |i|
-        string_position[1].next!
-      end
-
-    end
-    string_position[1]
-  end
+  #NOT BEING USED
+  # def horizontal_position_incrementor(index, string_position)
+  #
+  #   if index == 1
+  #     index.times do |i|
+  #     string_position[1].next!
+  #     end
+  #   elsif index == 2
+  #     (index - 1).times do |i|
+  #       string_position[1].next!
+  #     end
+  #   elsif index == 3
+  #     (index - 2).times do |i|
+  #       string_position[1].next!
+  #     end
+  #   elsif index == 4
+  #     (index - 3).times do |i|
+  #       string_position[1].next!
+  #     end
+  #
+  #   end
+  #   string_position[1]
+  # end
 
   # def shot_position_locator(row, column)
   #   #check for ship
   #   @computer_board.rows[row][column] = "H".rjust(2, " ")
   # end
-
-  def generate_board
-    puts @computer_board.columns
-    puts @computer_board.rows.join
-  end
-end
