@@ -1,9 +1,6 @@
 require './lib/battleship'
 # require './lib/repl'
 require './lib/phrases'
-# require './lib/board'
-# require './lib/computer'
-# require './lib/ships'
 require 'pry'
 class Repl
   include Phrases
@@ -12,6 +9,7 @@ class Repl
     @battleship = Battleship.new
     @input = ""
 
+    @battleship.computer_player.place_ships
   # Phrases.welcome_message
   def self.lines
     puts lines = "----------------------------------------"
@@ -27,6 +25,7 @@ class Repl
       Repl.error
     end
   end
+
 
   def self.computer_place_ships
     @battleship.computer_player.computer_place_ships
