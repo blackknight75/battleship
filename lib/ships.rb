@@ -6,9 +6,14 @@ class Ships
     # @destroyer = Array.new
     @ships = [
               ["Destroyer", ["",""]], ["Cruiser", ["", "", ""]],
-              ["Submarine", ["", "", ""]], ["Battleship", ["", "", "",""]],
-              ["Carrier", ["", "", "","", ""]]
+              
              ]
   end
+  #   @ships = [
+  #             ["Destroyer", ["",""]], ["Cruiser", ["", "", ""]],
+  #             ["Submarine", ["", "", ""]], ["Battleship", ["", "", "",""]],
+  #             ["Carrier", ["", "", "","", ""]]
+  #            ]
+  # end
 
 end

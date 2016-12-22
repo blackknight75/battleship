@@ -31,15 +31,12 @@ class Computer
 
   def validate_ship_position(ship)
     split_position = input_position_generator(generate_ship_position)
-    # possible_position = generate_ship_position
     key_to_validate = Array.new
     (ship[1].length).times do |index|
       #check orientation
       key_to_validate << @computer_board.rows[split_position[0]][(split_position[1] + index)]
     end
-    validate_key(key_to_validate, ship)
-    place_ship_on_board(split_position, ship)
-    place_position_on_ship(split_position, ship)
+    validate_key(key_to_validate, ship, split_position)
   end
 
   def place_ship_on_board(split_position, ship)
@@ -57,10 +54,11 @@ class Computer
     converted_string_position
   end
 
-  def validate_key(key_to_validate, ship)
+  def validate_key(key_to_validate, ship, split_position)
     passkey = generate_passkey(ship)
     if key_to_validate == passkey
-      #place ship on computer ship board
+      place_ship_on_board(split_position, ship)
+      place_position_on_ship(split_position, ship)
     else
       validate_ship_position(ship)
     end
@@ -75,26 +73,30 @@ class Computer
   end
 
   def place_position_on_ship(split_position, ship)
-    incremented_string = String.new
     string_position = convert_position_to_strings(split_position)
+    incremented_string = string_position
     (ship[1].length).times do |index|
       if index == 0
         ship[1][index] = string_position
       else
-        string_position.next!
-        ship[1][index] = string_position
+        ship[1][index] = increment_string_position(incremented_string, string_position, index)
       end
     end
   end
 
+  def increment_string_position(incremented_string, string_position, index)
+    index.times do
+      incremented_string = incremented_string.next
+    end
+    incremented_string
+  end
+
   def place_ships
-    # possible_position = generate_ship_position
     @computer_board.ships.ships.each do |ship|
       ship_length = ship[1].length
-      # split_position = input_position_generator(possible_position)
       validate_ship_position(ship)
-      binding.pry
     end
+    binding.pry
   end
 
   def orientation_generator
