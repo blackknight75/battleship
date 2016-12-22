@@ -1,3 +1,4 @@
+require './lib/board'
 class Computer
   attr_accessor :computer_board
 
@@ -28,7 +29,6 @@ class Computer
       end
       starting_position = generate_ship_position
     end
-    binding.pry
   end
 
   def row_calculator(index, split_position)

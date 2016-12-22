@@ -1,3 +1,4 @@
+require './lib/ships'
 class Board
   attr_reader :columns, :rows, :ships
   def initialize
