@@ -1,19 +1,11 @@
 class Ships
-  attr_reader :ships
+  attr_accessor :ships
 
   def initialize
-    # @patrol_boat = Array.new
-    # @destroyer = Array.new
     @ships = [
-              ["Destroyer", ["",""]], ["Cruiser", ["", "", ""]],
-              
-             ]
+      ["Destroyer", ["",""]], ["Cruiser", ["", "", ""]],
+      ["Submarine", ["", "", ""]], ["Battleship", ["", "", "",""]],
+      ["Carrier", ["", "", "","", ""]]
+    ]
   end
-  #   @ships = [
-  #             ["Destroyer", ["",""]], ["Cruiser", ["", "", ""]],
-  #             ["Submarine", ["", "", ""]], ["Battleship", ["", "", "",""]],
-  #             ["Carrier", ["", "", "","", ""]]
-  #            ]
-  # end
-
 end

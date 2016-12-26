@@ -1,7 +1,7 @@
 module Phrases
 
   def self.welcome_message
-    `say -r 10 -v Ava "Welcome to Battleship!"`
+    `say -r 10 -v Ava "Welcome to SUPER Battleship!"`
   end
 
   def self.instructions
@@ -20,6 +20,10 @@ module Phrases
     puts "(I)ntermediate: 8 x 8 and 3 ships(NOT WORKING)"
     puts "-".center(40, '-')
     puts "(H)ard: 12 x 12 and 4 ships(NOT WORKING)"
+  end
+
+  def self.available_difficulties
+    ["beginner", "b", "intermediate", "i", "hard", "h"]
   end
 
   def self.thinking
@@ -59,7 +63,7 @@ module Phrases
     puts `clear`
     Phrases.battleship_banner
     puts "Unrecognized command please try again."
-    Repl.lines
+    Battleship.lines
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
     input = gets.chomp
   end

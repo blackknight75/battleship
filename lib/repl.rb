@@ -6,10 +6,7 @@ class Repl
   include Phrases
   attr_reader :battleship
 
-    @battleship = Battleship.new
     @input = ""
-
-    @battleship.computer_player.place_ships
   # Phrases.welcome_message
   def self.lines
     puts lines = "----------------------------------------"
@@ -28,7 +25,7 @@ class Repl
 
 
   def self.computer_place_ships
-    @battleship.computer_player.computer_place_ships
+    @battleship.computer_player.place_ships
   end
 
   def self.play
@@ -43,9 +40,7 @@ class Repl
     Phrases.battleship_banner
     Phrases.difficulty_options
     difficulty = gets.chomp
-    #if "B" load grid and ships for beginner difficulty
-    #if "I" load grid and ships for intermediate difficulty
-    #if "H" load grid and ships for Hard  difficulty
+    @battleship = Battleship.new(difficulty)
   end
 
 
