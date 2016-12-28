@@ -14,7 +14,7 @@ class Computer
   def place_ship
     @board.ships.ships.each do |ship|
       ship_length = ship[1].length
-      Validator.validate_ship_position(ship, board)
+      Validator.validate_computer_ship_position(ship, board)
     end
   end
 

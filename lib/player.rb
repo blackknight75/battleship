@@ -12,10 +12,10 @@ class Player
   #if "I" load grid and ships for intermediate difficulty
   #if "H" load grid and ships for Hard  difficulty
 
-  def place_ship
+  def place_ship(ship_position, player_ship_orientation)
     @board.ships.ships.each do |ship|
       ship_length = ship[1].length
-      Validator.validate_ship_position(ship, board)
+      Validator.validate_player_ship_position(ship, board, ship_position, player_ship_orientation)
     end
   end
 

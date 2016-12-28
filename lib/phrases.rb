@@ -12,6 +12,10 @@ module Phrases
                       Q......"`
   end
 
+  def self.orientation_prompt
+    `say -r 10 -v Ava "Type H for horizontal or V for vertical"`
+  end
+
   def self.difficulty_options
     puts "Choose Difficulty."
     puts "-".center(40, '-')

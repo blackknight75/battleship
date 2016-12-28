@@ -63,6 +63,22 @@ class Battleship
     puts `clear`
     Phrases.battleship_banner
     Phrases.enter_player_position
+    Battleship.player_interface
+    player_ship_position = gets.chomp.upcase
+    if player_ship_position == "A1"
+      #sanitize input
+      puts "Orientation: (H) for horizontal or (V) for vertical"
+      Phrases.orientation_prompt
+      player_ship_orientation = gets.chomp.downcase
+      #sanitize input
+      @player.place_ship(player_ship_position, player_ship_orientation)
+    else
+      puts "Invalid Postion. Try again."
+      Battleship.player_place_ships
+    end
+  end
+
+  def self.player_interface
     Battleship.lines
     puts "SHOT BOARD".center(40, " ")
     Battleship.lines
@@ -74,10 +90,7 @@ class Battleship
     Battleship.lines
     @player.generate_ship_board
     Battleship.lines
-    input = gets.chomp
-    "Now input the orientation of the ship.
-    H for horizontal or V for vertical"
-    orientation = gets.chomp
+    @computer_player.generate_board
   end
 
   Phrases.battleship_banner
