@@ -1,8 +1,10 @@
+require 'colorize'
 require './lib/computer'
 class Validator
-  def self.generate_ship_position
-    alpha = ["A", "B", "C", "D"].sample
-    number = ["1","2","3","4"].sample
+  def self.generate_ship_position(board)
+    board_length = board.rows.count
+    alpha = ["A","B","C","D","E","F","G","H","I","J","K","L"][0..(board_length - 1)].sample
+    number = ["1","2","3","4","5","6","7","8","9","10","11","12"][0..(board_length - 1)].sample
     alpha + number
   end
 
@@ -31,17 +33,16 @@ class Validator
     position << row
   end
 
-  def self.validate_player_ship_position(ship, board, ship_position, player_ship_orientation)
-    binding.pry
+  def self.validate_player_ship_position(ship, board, ship_position, orientation)
     key_to_validate = []
     split_position = Validator.input_position_generator(ship_position)
-    Validator.orientation_direction(key_to_validate, split_position, player_ship_orientation, ship, board)
-    Validator.validate_key_for_player(key_to_validate, ship, split_position, board, player_ship_orientation)
+    Validator.orientation_direction(key_to_validate, split_position, orientation, ship, board)
+    Validator.validate_key_for_player(key_to_validate, ship, split_position, board, orientation)
   end
 
   def self.validate_computer_ship_position(ship, board)
     key_to_validate = []
-    split_position = Validator.input_position_generator(Validator.generate_ship_position)
+    split_position = Validator.input_position_generator(Validator.generate_ship_position(board))
     orientation = Validator.orientation_generator
     Validator.orientation_direction(key_to_validate, split_position, orientation, ship, board)
     Validator.validate_key_for_computer(key_to_validate, ship, split_position, board, orientation)
@@ -50,9 +51,9 @@ class Validator
   def self.place_ship_on_board(split_position, ship, board, orientation)
     (ship[1].length).times do |index|
       if orientation == "horizontal" || orientation == "h"
-      board.rows[split_position[0]][split_position[1] + index] = ("S".rjust(2, " "))
+        board.rows[split_position[0]][split_position[1] + index] = ("S".rjust(2, " "))
       else orientation == "vertical" || orientation == "v"
-        board.rows[split_position[0]+ index][split_position[1]] = ("S".rjust(2, " "))
+        board.rows[split_position[0] + index][split_position[1]] = ("S".rjust(2, " "))
       end
     end
   end
@@ -63,19 +64,12 @@ class Validator
         Validator.build_horizontal_key_to_validate(key_to_validate, split_position, board, index)
       else orientation == "vertical" || orientation == "v"
         Validator.build_vertical_key_to_validate(key_to_validate, split_position, board, index)
-        # if (board.rows[split_position[0] + 1]) == nil || (board.rows[split_position[1] + 1]) == nil
-        #   key_to_validate << nil
-        # elsif orientation == "horizontal"
-        #   key_to_validate << board.rows[split_position[0]][(split_position[1] + index)]
-        # elsif orientation == "vertical"
-        #   key_to_validate << board.rows[split_position[0] + index][split_position[1]]
-        # end
       end
     end
   end
 
   def self.build_horizontal_key_to_validate(key_to_validate, split_position, board, index)
-    if (board.rows[split_position[1] + 1]) == nil
+    if (board.rows[split_position[1] + index]) == nil
       key_to_validate << nil
     else
       key_to_validate << board.rows[split_position[0]][(split_position[1] + index)]
@@ -83,7 +77,7 @@ class Validator
   end
 
   def self.build_vertical_key_to_validate(key_to_validate, split_position, board, index)
-    if (board.rows[split_position[0] + 1]) == nil
+    if (board.rows[split_position[0] + index]) == nil
       key_to_validate << nil
     else
       key_to_validate << board.rows[split_position[0] + index][split_position[1]]
@@ -111,21 +105,21 @@ class Validator
     passkey = Validator.generate_passkey(ship)
     if key_to_validate == passkey
       Validator.place_ship_on_board(split_position, ship, board, orientation)
-      Validator.place_position_on_ship(split_position, ship)
+      Validator.place_position_on_ship(split_position, ship, orientation)
     else
       validate_computer_ship_position(ship, board)
     end
   end
 
-  def self.validate_key_for_player(key_to_validate, ship, split_position, board, player_ship_orientation)
+  def self.validate_key_for_player(key_to_validate, ship, split_position, board, orientation)
     passkey = Validator.generate_passkey(ship)
     if key_to_validate == passkey
-      Validator.place_ship_on_board(split_position, ship, board)
-      Validator.place_position_on_ship(split_position, ship)
+      Validator.place_ship_on_board(split_position, ship, board, orientation)
+      Validator.place_position_on_ship(split_position, ship, orientation)
     else
       puts "Invalid Ship Position. Try Again."
       ship_position = gets.chomp.upcase
-      validate_player_ship_position(ship, board, ship_position, player_ship_orientation)
+      validate_player_ship_position(ship, board, ship_position, orientation)
     end
   end
 
@@ -137,14 +131,17 @@ class Validator
     key
   end
 
-  def self.place_position_on_ship(split_position, ship)
+  def self.place_position_on_ship(split_position, ship, orientation)
     string_position = Validator.convert_position_to_strings(split_position)
     incremented_string = string_position
     (ship[1].length).times do |index|
       if index == 0
         ship[1][index] = string_position
-      else
+      elsif orientation == "h" || orientation = "horizontal"
         ship[1][index] = Validator.increment_string_position(incremented_string, string_position, index)
+      else
+        ship[1][index] = Validator.increment_string_position_vertical(incremented_string, string_position, index)
+
       end
     end
   end
@@ -152,6 +149,13 @@ class Validator
   def self.increment_string_position(incremented_string, string_position, index)
     index.times do
       incremented_string = incremented_string.next
+    end
+    incremented_string
+  end
+
+  def self.increment_string_position_vertical(incremented_string, string_position, index)
+    index.times do
+      incremented_string = incremented_string[0].next
     end
     incremented_string
   end

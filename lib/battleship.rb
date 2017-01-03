@@ -28,6 +28,7 @@ class Battleship
       #main_prompt
     else
       Phrases.error
+      Battleship.main_prompt
     end
   end
 
@@ -62,10 +63,10 @@ class Battleship
   def self.player_place_ships
     puts `clear`
     Phrases.battleship_banner
-    Phrases.enter_player_position
     Battleship.player_interface
+    Phrases.enter_player_position
     player_ship_position = gets.chomp.upcase
-    if player_ship_position == "A1"
+    if Phrases.valid_positions.include?(player_ship_position)
       #sanitize input
       puts "Orientation: (H) for horizontal or (V) for vertical"
       Phrases.orientation_prompt
